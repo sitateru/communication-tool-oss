@@ -29,3 +29,7 @@ ui-debug.log*
 # firebase
 .firebase
 .runtimeconfig.json
+
+# instance specific files
+src/config.ts
+.firebaserc
