@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-2">
+  <div class="mt-8px">
     <base-button
       v-for="props in reactions"
       :key="props.id"

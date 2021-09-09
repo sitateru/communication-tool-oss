@@ -25,6 +25,9 @@ module.exports = {
         },
         button: {
           DEFAULT: "#A8A8A8"
+        },
+        quote: {
+          DEFAULT: "#A8A8A8"
         }
       },
       fontSize: {
@@ -44,12 +47,14 @@ module.exports = {
         "2px": "2px",
         "4px": "4px",
         "8px": "8px",
+        "12px": "12px",
         "24px": "24px",
         "32px": "32px",
         "40px": "40px",
         "80px": "80px"
       },
       width: {
+        "3px": "3px",
         "67px": "67px",
         "80px": "80px",
         "120px": "120px",
@@ -68,6 +73,7 @@ module.exports = {
         "480px": "480px"
       },
       maxWidth: {
+        "429px": "429px",
         "1000px": "1000px"
       },
       height: {
@@ -78,6 +84,9 @@ module.exports = {
         "120px": "120px",
         "200px": "200px",
         "276px": "276px"
+      },
+      maxHeight: {
+        "32px": "32px"
       },
       borderRadius: {
         "4px": "4px"

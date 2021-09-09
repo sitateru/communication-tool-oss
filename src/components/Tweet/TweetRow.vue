@@ -23,6 +23,7 @@
           <p
             v-html="safeHtmlWithLink(tweet.content, 'text-blue underline')"
           ></p>
+          <ogp-view-lis :urls="urls" />
           <reaction-buttons
             :reactions="state.reactions"
             @add="addReaction"
@@ -35,13 +36,12 @@
               v-for="tweet in state.replayTweets"
               :key="tweet.id"
               :tweet="tweet"
-              :user-id="userId"
               :my-user-id="myUserId"
             />
           </ul>
         </div>
         <div class="mt-3" v-if="!tweet.replyTo">
-          <tweet-editor :user-id="userId" :reply-to="tweet" />
+          <tweet-editor :user-id="myUserId" :reply-to="tweet" />
         </div>
       </div>
     </div>
@@ -63,7 +63,7 @@ import { User } from "@/interfaces";
 import { TweetsKey } from "@/injectionKeys";
 import AsyncImage from "@/components/Common/AsyncImage.vue";
 import TweetEditor from "@/components/Tweet/TweetEditor.vue";
-import { safeHtmlWithLink } from "@/utils";
+import { getUrls, safeHtmlWithLink } from "@/utils";
 import dayjs from "dayjs";
 import TweetKit from "@/components/Tweet/TweetKit.vue";
 import { addTweetReaction, removeTweetReaction } from "@/lib/firestore/tweets";
@@ -71,6 +71,7 @@ import { createReactionButtonsProps, ReactionButtonProps } from "@/lib/comment";
 import ReactionButtons from "@/components/Common/ReactionButtons.vue";
 import { Tweet } from "@/interfaces/tweets";
 import { findUser } from "@/lib/firestore/users";
+import OgpViewLis from "@/components/Common/OgpViewList.vue";
 
 interface State {
   replayTweets: Tweet[];
@@ -80,6 +81,7 @@ interface State {
 
 export default defineComponent({
   components: {
+    OgpViewLis,
     ReactionButtons,
     TweetKit,
     AsyncImage,
@@ -89,10 +91,6 @@ export default defineComponent({
   props: {
     tweet: {
       type: Object as PropType<Tweet>,
-      required: true
-    },
-    userId: {
-      type: String,
       required: true
     },
     myUserId: {
@@ -114,6 +112,7 @@ export default defineComponent({
     onMounted(async () => {
       if (!tweetsRef) return;
 
+      // TODO: リファクタしたい
       const tweetRef = await tweetsRef.doc(props.tweet.id);
       const query = tweetsRef
         .where("replyTo", "==", tweetRef)
@@ -185,13 +184,25 @@ export default defineComponent({
       removeTweetReaction(tweetId, id, props.myUserId);
     };
 
+    const urls = computed(() => {
+      const _urls: string[] = [];
+
+      const matchedUrls = getUrls(props.tweet.content);
+      if (matchedUrls) {
+        _urls.push(...matchedUrls);
+      }
+
+      return _urls;
+    });
+
     return {
       state,
       updatedAt,
       safeHtmlWithLink,
       selectReaction,
       addReaction,
-      removeReaction
+      removeReaction,
+      urls
     };
   }
 });

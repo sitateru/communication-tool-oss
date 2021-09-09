@@ -31,6 +31,7 @@
             class="mt-2 text-sm whitespace-pre-line"
             v-html="safeHTML"
           ></p>
+          <ogp-view-list :urls="urls" />
         </div>
         <div v-else>
           <comment-edit-form
@@ -57,7 +58,7 @@ import AsyncImage from "@/components/Common/AsyncImage.vue";
 import CommentKit from "@/components/Comment/CommentKit.vue";
 import { ProfileMessages, User } from "@/interfaces";
 import { getCurrentUser } from "@/firebase";
-import { safeHtmlWithLink } from "@/utils";
+import { getUrls, safeHtmlWithLink } from "@/utils";
 import dayjs from "dayjs";
 import { createReactionButtonsProps, ReactionButtonProps } from "@/lib/comment";
 import {
@@ -66,6 +67,7 @@ import {
 } from "@/lib/firestore/profileMessages";
 import ReactionButtons from "@/components/Common/ReactionButtons.vue";
 import { findUser } from "@/lib/firestore/users";
+import OgpViewList from "@/components/Common/OgpViewList.vue";
 
 interface State {
   isEditing: boolean;
@@ -77,6 +79,7 @@ interface State {
 export default defineComponent({
   name: "CommentListItem",
   components: {
+    OgpViewList,
     ReactionButtons,
     AsyncImage,
     CommentEditForm,
@@ -121,12 +124,24 @@ export default defineComponent({
         immediate: true
       }
     );
+    const textRow = computed(() => props.comment.text.split("\n\n"));
 
     const paragraphs = computed(() =>
-      props.comment.text
-        .split("\n\n")
-        .map(text => safeHtmlWithLink(text, "text-blue underline"))
+      textRow.value.map(text => safeHtmlWithLink(text, "text-blue underline"))
     );
+
+    const urls = computed(() => {
+      const _urls: string[] = [];
+
+      textRow.value.forEach(text => {
+        const matchedUrls = getUrls(text);
+        if (matchedUrls) {
+          _urls.push(...matchedUrls);
+        }
+      });
+
+      return _urls;
+    });
 
     const currentUser = getCurrentUser();
 
@@ -186,6 +201,7 @@ export default defineComponent({
 
     return {
       paragraphs,
+      urls,
       createdAt,
       isMyself,
       state,
