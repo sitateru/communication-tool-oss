@@ -33,3 +33,6 @@ ui-debug.log*
 # instance specific files
 src/config.ts
 .firebaserc
+
+public
+!public/index.html
