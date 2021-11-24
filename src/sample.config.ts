@@ -25,6 +25,7 @@ export const appLogo = {
 };
 
 export type Office = "kumamoto" | "tokyo" | "other";
+export const officeDefault = "kumamoto";
 
 export const offices = [
   {

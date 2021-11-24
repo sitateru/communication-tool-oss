@@ -193,7 +193,7 @@ import {
 } from "@/firebase";
 import { UsersKey } from "@/injectionKeys";
 import { FrequencyOfAttendanceInterval, User, UserForm } from "@/interfaces";
-import { Office } from "@/config";
+import { Office, officeDefault } from "@/config";
 import router from "@/router";
 import FieldCoverImage from "@/components/Form/Field/FieldCoverImage.vue";
 import FieldImageNote, {
@@ -284,7 +284,7 @@ export default defineComponent({
       firstNameJP: props.user?.firstNameJP || "",
       lastName: props.user?.lastName || "",
       firstName: props.user?.firstName || "",
-      location: props.user?.location || "kumamoto",
+      location: props.user?.location || officeDefault,
       birthday: props.user?.birthday,
       height: props.user?.height,
       joiningDay: props.user?.joiningDay,
