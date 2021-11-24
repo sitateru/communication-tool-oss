@@ -1,0 +1,9 @@
+rules_version = '2';
+// Require Authentication in order to perform any read or write operations on all files
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
