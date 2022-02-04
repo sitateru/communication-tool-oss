@@ -3,7 +3,7 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     fontFamily: {
-      corp: ["Questrial", "sans-serif"],
+      corp: ["Spartan", "sans-serif"],
       DEFAULT: ["Hiragino Kaku Gothic Pro", "sans-serif"]
     },
     extend: {
